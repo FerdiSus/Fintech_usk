@@ -27,5 +27,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/addToCart',[TransactionController::class,'addToCart'])->name('addToCart');
 Route::post('/payNow',[TransactionController::class,'payNow'])->name('payNow');
 Route::post('/topUpNow',[WalletController::class,'topUpNow'])->name('topUpNow');
+Route::post('/request_topup',[WalletController::class,'request_topup'])->name('request_topup');
 Route::get('/download{order_id}',[TransactionController::class,'download'])->name('download');
+
 

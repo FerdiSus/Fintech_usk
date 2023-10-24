@@ -23,4 +23,14 @@ class WalletController extends Controller
 
         return redirect()->back()->with('status','Berhasil Top up Setor di bank terdekat');
     }
+
+    public function request_topup(Request $request)
+    {
+        Wallet::find($request->id)->update([
+            'status' => 'selesai'
+        ]);
+
+        return redirect()->back()->with('status', 'Berhasil Konfirmasi Top Up Nasabah');
+
+    }
 }

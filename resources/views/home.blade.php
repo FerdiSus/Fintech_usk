@@ -3,6 +3,74 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
+        @if (Auth::user()->role_id == 'bank')
+        <div class="col md-14">
+            <div class="row">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header dw-bold">
+                            Saldo
+                        </div>
+                        <div class="card-body">
+                            Rp. {{number_format($saldo)}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header dw-bold">
+                            Jumlah Nasabah
+                        </div>
+                        <div class="card-body">
+                            {{ $nasabah }}
+                        </div>
+                        <div class="card-footer">
+                            <a href="" class="bg-color-black">Lihat Detail</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header dw-bold">
+                            Jumlah Transaksi
+                        </div>
+                        <div class="card-body">
+                            {{ $transactions }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table class="table table-striped mt-5">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Nasabah</th>
+                            <th>Permintaan Saldo</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($request_topup as $request)
+                        <tr>
+                            <td></td>
+                            <td>{{$request->user->username}}</td>
+                            <td>{{$request->credit}}</td>
+                            <td>
+                                <form action="{{ route('request_topup') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="id" id="id" value="{{ $request->id}}">
+                                    <td><button type="submit" class="btn btn-primary">SETUJU</button></td>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
+        @if (Auth::user()->role_id == 'siswa')
         <div class="container">
             <h1>
                 Welcome, {{Auth::user()->name}}
@@ -64,8 +132,8 @@
                                 </span> 
                           </div>
                             <div class="card-body">
-                                <img src="{{$product->photo}}"  />
-                                <div class="d-flex justify-content-center fw-bold"  >{{$product->desc}}</div>
+                                <img src="{{$product->photo}}" style="width: 100%; height: 200px"/>
+                                <div class="d-flex justify-content-center fw-bold mt-3"  >{{$product->desc}}</div>
                                 <div class=" d-flex justify-content-end">Harga: {{number_format($product->price)}}</div>
                             </div>
                             <div class="card-footer">
@@ -172,4 +240,5 @@
         </div>
     </div>
 </div> --}}
+@endif
 @endsection
