@@ -38,7 +38,7 @@ class TransactionController extends Controller
 
 
         $carts = Transaction::where('user_id', Auth::user()->id)->where('status','di keranjang')->get();
-        
+
         $total_debit = 0;
 
         foreach($carts as $cart)
@@ -61,7 +61,7 @@ class TransactionController extends Controller
                 ]
             );
         }
-
+        
         return redirect()->back()->with('status','Berhasil membayar');
     }
 
@@ -72,8 +72,7 @@ class TransactionController extends Controller
         $total_biaya = 0;
 
         foreach($transactions as $transaction){
-            $total_price = $transaction->price * $transaction->quantity;
-
+            $total_price = $transaction->quantity * $transaction->price;
             $total_biaya = $total_price;
         }
 

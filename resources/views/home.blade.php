@@ -8,10 +8,8 @@
             <div class="row">
                 <div class="col-4">
                     <div class="card">
-                        <div class="card-header dw-bold">
-                            Saldo
-                        </div>
                         <div class="card-body">
+                          <h3 class="fw-bold">Saldo Total</h3>
                             Rp. {{number_format($saldo)}}
                         </div>
                     </div>
@@ -21,11 +19,9 @@
                         <div class="card-header dw-bold">
                             Jumlah Nasabah
                         </div>
-                        <div class="card-body">
+                        <div class="card-body d-flex justify-content-between">
                             {{ $nasabah }}
-                        </div>
-                        <div class="card-footer">
-                            <a href="" class="bg-color-black">Lihat Detail</a>
+                            <a href="" class="bi bi-person-fill-up" ></a>
                         </div>
                     </div>
                 </div>
@@ -41,26 +37,28 @@
                 </div>
             </div>
             <div>
-                <table class="table table-striped mt-5">
+                <table class="table table-bordered table-striped mt-5 ">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Nama Nasabah</th>
-                            <th>Permintaan Saldo</th>
-                            <th>Aksi</th>
+                            <th class="col-3">No</th>
+                            <th class="col-3">Nama Nasabah</th>
+                            <th class="col-4">Permintaan Saldo</th>
+                            <th class="col-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($request_topup as $request)
                         <tr>
-                            <td></td>
+                            <td>1</td>
                             <td>{{$request->user->username}}</td>
                             <td>{{$request->credit}}</td>
                             <td>
                                 <form action="{{ route('request_topup') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="id" id="id" value="{{ $request->id}}">
-                                    <td><button type="submit" class="btn btn-primary">SETUJU</button></td>
+                                    <button type="submit" class="btn p-0" style="font-size: 23px">
+                                        <i class="bi bi-check-circle"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -72,19 +70,13 @@
         @endif
         @if (Auth::user()->role_id == 'siswa')
         <div class="container">
-            <h1>
-                Welcome, {{Auth::user()->name}}
-            </h1>
             <span style="font-size: 20px">
                 Saldo anda: 
                 <span class="fw-bold" >
                     {{number_format($saldo,2)}}
                 </span>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet" viewBox="0 0 16 16">
-                        <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
-                    </svg> <span>Top Up</span>
+                <button type="button" class="btn bi bi-plus-circle p-0" style="font-size: 20px; color:blue" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 </button>
                     <!-- Modal -->
                     <form method="POST" action="{{route('topUpNow')}}">
@@ -126,28 +118,19 @@
                         <input type="hidden" value="{{$product->id}}" name="product_id">
                         <input type="hidden" value="{{$product->price}}" name="price">
                           <div class="card">
-                          <div class="card-header d-flex justify-content-center">
-                               <span class="fw-bold">
-                                   {{$product->name}}
-                                </span> 
-                          </div>
+                              <img src="{{$product->photo}}" style="width: 100%; height: 200px"/>      
                             <div class="card-body">
-                                <img src="{{$product->photo}}" style="width: 100%; height: 200px"/>
-                                <div class="d-flex justify-content-center fw-bold mt-3"  >{{$product->desc}}</div>
-                                <div class=" d-flex justify-content-end">Harga: {{number_format($product->price)}}</div>
-                            </div>
-                            <div class="card-footer">
-                                <div class=" row d-flex justify-content-between">
+                                <div class="fw-bold "  >{{$product->name}}</div>
+                                <div>{{$product->desc}}</div>
+                                <div class=" d-flex justify-content-start" style="color:crimson">Rp: {{number_format($product->price)}}</div>
+                                <div class=" row d-flex justify-content-between mt-3">
                                     <div class="col-5">
-                                        <input class="form-control" type="number" name="quantity" value="0" min="0">
+                                        <input class="form-control" type="number" name="quantity" value="1" min="0">
                                     </div>
-                                    <div class="col-auto">
+                                    <div class="col-auto d-flex align-items-center">
                                         <button  type="submit" class="btn btn-primary btn-sm">+ AddToCart</button>
                                     </div>
                                 </div>
-                                {{-- <div class="d-grid gap-2">
-                                     
-                                </div> --}}
                             </div>
                         </div>
                     </form>

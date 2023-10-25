@@ -65,7 +65,7 @@ class HomeController extends Controller
             }
             $saldo = $credit - $debit;
             $products = Product::all();
-            $carts = Transaction::where('status', 'dikeranjang')->where('user_id', Auth::user()->id)->get();
+            $carts = Transaction::where('status', 'di keranjang')->where('user_id', Auth::user()->id)->get();
     
             $total_biaya = 0;
     
@@ -74,7 +74,7 @@ class HomeController extends Controller
                 $total_biaya += $total_price;
             }
     
-            $mutasi = Wallet::where('user_id', Auth::user()->id)->orderBy('created_at','DESC')->get();
+            $mutasi = Wallet::where('user_id', Auth::user()->id)->orderBy('created_at','DESC')->paginate(12);
             $transactions = Transaction::where('status', 'diambil')->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(5)->groupBy('order_id');
             
             return view('home', compact('products', 'carts', 'saldo', 'total_biaya','mutasi','transactions'));
