@@ -47,50 +47,50 @@ class FirstSeeder extends Seeder
         ]);
 
         Categorie::create([
-            'name' => "Minuman"
+            'name' => "Senjata"
         ]);
 
         Categorie::create([
-            'name' => "Makanan"
+            'name' => "Organ"
         ]);
 
         Categorie::create([
-            'name' => "Snack"
+            'name' => "Barang aneh"
         ]);
 
         Product::create([
-            'name' => "Lemon Tea",
-            'price' => "5000",
+            'name' => "Ginjal Kanan",
+            'price' => "500000",
             'stock' => 100,
-            'photo' => ".jpg",
-            "desc" => "Es Teh Lemon",
-            'category_id' => 3,
+            'photo' => "https://images.unsplash.com/photo-1618939304347-e91b1f33d2ab?auto=format&fit=crop&q=80&w=1887&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "desc" => "Ginjal Frozen",
+            'category_id' => 2,
             'stand' => '2'
         ]);
 
         Product::create([
-            'name' => "Meat Ball",
-            'price' => "10000",
+            'name' => "Glock 17",
+            'price' => "250000",
             'stock' => 50,
-            'photo' => ".jpg",
-            "desc" => "Bakso Daging",
-            'category_id' => 3,
+            'photo' => "https://images.unsplash.com/photo-1679759021928-066137103478?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "desc" => "Punya Ferdy Sambo",
+            'category_id' => 1,
             'stand' => '1'
         ]);
 
         Product::create([
-            'name' => "Risoles",
-            'price' => "3000",
+            'name' => "AK47",
+            'price' => "185000",
             'stock' => 50,
-            'photo' => ".jpg",
-            "desc" => "Risol Mayo",
-            'category_id' => 3,
+            'photo' => "https://images.unsplash.com/photo-1669228034704-8fe219a5066b?auto=format&fit=crop&q=80&w=1932&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "desc" => "Stock Terbatas",
+            'category_id' => 1,
             'stand' => '1'
         ]);
 
         Wallet::create([
             'user_id' => 4,
-            'credit' => 100000,
+            'credit' => 1000000,
             'debit' => null,
             'description' => "Pembukaan tabungan"
         ]);

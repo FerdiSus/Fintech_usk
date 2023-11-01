@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -18,26 +19,42 @@ class TransactionController extends Controller
         $price = $request->price;
         $quantity = $request->quantity;
 
-        Transaction::create([
-            
-            'user_id' => $user_id,
-            'product_id' => $product_id,
-            'status' => $status,
-            'price' => $price,
-            'quantity' => $quantity
-
-        ]);
+        if($quantity <= 0)
+        {
+            return redirect()->back()->with('status','Masukan jumlah barang');
+        }
+        else
+        {            
+            Transaction::create([
+                
+                'user_id' => $user_id,
+                'product_id' => $product_id,
+                'status' => $status,
+                'price' => $price,
+                'quantity' => $quantity
+    
+            ]);
+        }
 
         return redirect()->back()->with('status','Berhasil menambah ke Keranjang');
     }
 
     public function payNow()
     {
-        $status= 'diambil';
+        $status= 'dibayar';
         $order_id = 'INV_' . Auth::user()->id .date('YmdHis');
+        $wallets = Wallet::where('status', 'selesai')->where('user_id', Auth::user()->id)->get();
+            $credit = 0;
+            $debit = 0;
+            foreach($wallets as $wallet)
+            {
+                $credit += $wallet->credit;
+                $debit += $wallet->debit;
+            }
 
-
+        $saldo = $credit - $debit;
         $carts = Transaction::where('user_id', Auth::user()->id)->where('status','di keranjang')->get();
+        // $products = Product::where('stock', 0)->get();
 
         $total_debit = 0;
 
@@ -47,21 +64,33 @@ class TransactionController extends Controller
             $total_debit += $total_price;
         }
 
-        Wallet::create([
-            'user_id' => Auth::user()->id,
-            'debit' => $total_debit,
-            'description' => 'pembelian produk'
-        ]);
-
-        foreach($carts as $cart){
-            Transaction::where('status', 'di keranjang')->update(
-                [
-                    'status' => $status,
-                    'order_id' => $order_id
-                ]
-            );
-        }
         
+       if($saldo < $total_debit)
+       {
+        return redirect()->back()->with('status','Saldo anda tidak cukup');
+       }
+       elseif($total_debit == 0)
+       {
+        return redirect()->back()->with('status','tidak ada barang di keranjang');
+       }
+       else{
+
+           Wallet::create([
+               'user_id' => Auth::user()->id,
+               'debit' => $total_debit,
+               'description' => 'pembelian produk'
+            ]);
+            
+            foreach($carts as $cart){
+                Transaction::where('status', 'di keranjang')->update(
+                    [
+                        'status' => $status,
+                        'order_id' => $order_id
+                        ]
+                    );
+                }
+                
+        }
         return redirect()->back()->with('status','Berhasil membayar');
     }
 
@@ -73,10 +102,33 @@ class TransactionController extends Controller
 
         foreach($transactions as $transaction){
             $total_price = $transaction->quantity * $transaction->price;
-            $total_biaya = $total_price;
+            $total_biaya += $total_price;
         }
 
         return view('receipt', compact('transactions', 'total_biaya'));
 
+    }
+
+    public function DeleteCart($id)
+     {
+        $delete = Transaction::find($id)->delete();
+        if ($delete)
+        {
+            return redirect('/home')->with('status', 'Berhasil menghapus produk dari keranjang');
+        }
+        else
+        {
+            return redirect('/home')->with('status','Gagal menghapus produkd ari keranjang');
+        }
+     }
+
+    public function take($id)
+    {
+        Transaction::find($id)->update([
+            'status' => 'diambil'
+
+        ]);
+
+        return redirect()->back()->with('status','Berhasil ambil');
     }
 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId("category_id")->constrained();
             $table->char("stand",2);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

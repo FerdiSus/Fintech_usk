@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categorie;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
@@ -21,6 +22,7 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+
     public function rupiah($saldo){
 	
         $hasil_rupiah = "Rp " . number_format($saldo,2,',','.');
@@ -34,6 +36,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(Auth::user()->role_id == "kantin"){
+            $products = Product::all();   
+            $categories = Categorie::all();
+            $transactions = Transaction::where('status','dibayar')->get();
+
+            return view('home', compact('products','categories','transactions'));
+        }
         if(Auth::user()->role_id == "bank"){
             $wallets = Wallet::where('status', 'selesai')->where('user_id', '4')->get();
             $credit = 0;
@@ -65,7 +74,7 @@ class HomeController extends Controller
             }
             $saldo = $credit - $debit;
             $products = Product::all();
-            $carts = Transaction::where('status', 'di keranjang')->where('user_id', Auth::user()->id)->get();
+            $carts = Transaction::where('status', 'di keranjang')->where('user_id', '4')->get();
     
             $total_biaya = 0;
     

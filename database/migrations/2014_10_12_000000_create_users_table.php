@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('password');
             $table->enum('role_id',['admin','bank','kantin','siswa'])->default('siswa');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
