@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
+use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use Illuminate\Http\Request;

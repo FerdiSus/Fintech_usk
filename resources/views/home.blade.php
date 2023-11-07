@@ -253,6 +253,11 @@
         @endif
         @if (Auth::user()->role_id == 'bank')
         <div class="col md-14">
+            @if (session('status'))
+            <div class="alert alert-success mt-2" role="alert">
+                {{session('status')}}
+            </div>
+             @endif
             <div class="row">
                 <div class="col-4">
                     <div class="card">
@@ -374,7 +379,7 @@
                                 <div>Stok: {{$product->stock}}</div>
                                 <div class=" row d-flex justify-content-between mt-3">
                                     <div class="col-5">
-                                        <input class="form-control" type="number" name="quantity" value="1" min="1">
+                                        <input class="form-control" type="number" name="quantity" value="1" min="1" max="{{$product->stock}}">
                                     </div>
                                     <div class="col-auto d-flex align-items-center">
                                         <button  type="submit" class="btn btn-primary btn-sm">+ AddToCart</button>
@@ -401,13 +406,13 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-8">
-                                    @if ($cart->product->stock <= 0)
-                                     <s>   
-                                    @endif
-                                    {{$cart->product->name}} | {{number_format($cart->price)}} x {{$cart->quantity}}
-                                    @if ($cart->product->stock <= 0)
-                                     </s>
-                                    @endif
+                                        @if ($cart->product->stock <= 0)
+                                        <s>   
+                                        @endif
+                                        {{$cart->product->name}} | {{number_format($cart->price)}} x {{$cart->quantity}}
+                                        @if ($cart->product->stock <= 0)
+                                        </s>
+                                        @endif
                                 </div>
                                 <div class="col text-end">
                                         <button class="btn btn-danger btn-sm p-1 "><i  class="bi bi-trash3"></i></button>
@@ -474,6 +479,56 @@
                 </div>
             </div>
         </div>
-</div>
-@endif
+    </div>
+    @endif
+    @if (Auth::user()->role_id == 'admin')
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    @include('components.sideBar_add')
+                </div>
+            </div>
+        </div>
+        @if (session('status'))
+        <div class="alert alert-success mt-2" role="alert">
+            {{session('status')}}
+        </div>
+        @endif
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    Beranda
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                  <h3 class="fw-bold">Product</h3>
+                                   {{$products}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="fw-bold">Product</h3>    
+                                    {{$nasabah}}
+                                    <a href="" class="bi bi-person-fill-up" ></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="fw-bold">Product</h3>
+                                    {{ $transactions }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
